@@ -10,8 +10,9 @@ class Login extends Controller
     public function getCode()
     {
         $data = input();
+    
         // 登陆验证码
-        // if($_POST){
+        if($_GET){
 
             if ($data['type'] == 0) {
                 // 验证
@@ -32,6 +33,10 @@ class Login extends Controller
                 // }
 
                 // 插入verify_code记录
+
+                //过期时间60s
+                //60s内如果一致就可以通过。
+
                 $db_data = array(
                     'code' => $code,
                     'phone' => $data['mobile'],
@@ -50,7 +55,7 @@ class Login extends Controller
                 ];
                 return json(['status' => 0, 'msg' => '短信发送成功', 'data' => $code_info]);
             }
-        // }
+        }
 
     }
 
@@ -63,7 +68,7 @@ class Login extends Controller
             //验证
 
             // 从数据库获取code验证码
-
+            
         }
 
     }  
