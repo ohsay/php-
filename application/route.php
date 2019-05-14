@@ -19,4 +19,6 @@ use think\Route;
 //     ],
 
 // ];
-Route::any('api/getCode', 'api/Login/getCode');
+Route::any('api/getcode', 'api/Login/getCode');
+Route::any('api/login', 'api/Login/login');
+Route::any('api/userinfo', 'api/user/index');
