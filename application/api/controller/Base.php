@@ -10,19 +10,19 @@ class Base extends Controller
     {
         parent::_initialize();
 
-        // if (!function_exists('getallheaders')) {
-        //         $data = $this->getallheaders();
-        // }else{
+        if (!function_exists('getallheaders')) {
+                $data = $this->getallheaders();
+        }else{
                 $data = getallheaders();
-        // }        
+        }        
                 // dump($data);exit;
-                $this->token = $data['Authorization'];
-                
-                $res = $this->check_token($this->token);
-                if ($res) {
-                    json($res)->send();
-                    exit;
-                }
+        $this->token = $data['Authorization'];
+        
+        $res = $this->check_token($this->token);
+        if ($res) {
+            json($res)->send();
+            exit;
+        }
 
         // }
         
