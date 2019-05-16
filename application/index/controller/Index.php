@@ -7,20 +7,20 @@ class Index extends Controller
     public function index()
     {
         //  return $this->success('跳转成功','index/index');
-        $array[] = array("age" => 20, "name" => "li");
-        $array[] = array("age" => 21, "name" => "ai");
-        $array[] = array("age" => 20, "name" => "ci");
-        $array[] = array("age" => 22, "name" => "di");
+        // $array[] = array("age" => 20, "name" => "li");
+        // $array[] = array("age" => 21, "name" => "ai");
+        // $array[] = array("age" => 20, "name" => "ci");
+        // $array[] = array("age" => 22, "name" => "di");
 
-        foreach ($array as $key => $value) {
-            $age[$key] = $value['age'];
-            $name[$key] = $value['name'];
-        }
+        // foreach ($array as $key => $value) {
+        //     $age[$key] = $value['age'];
+        //     $name[$key] = $value['name'];
+        // }
 
-        array_multisort($age, SORT_NUMERIC, SORT_DESC, $name, SORT_STRING, SORT_ASC, $array);
-        dump($age);
-        dump( $name);
-        dump($array);
+        // array_multisort($age, SORT_NUMERIC, SORT_DESC, $name, SORT_STRING, SORT_ASC, $array);
+        // dump($age);
+        // dump( $name);
+        // dump($array);
         return $this->fetch();
     }
     public function getToken()
@@ -46,5 +46,33 @@ class Index extends Controller
         $key = "huang";  //上一个方法中的 $key 本应该配置在 config文件中的
         $info = JWT::decode($jwt, $key, ["HS256"]); //解密jwt
         return json($info);
+    }
+
+    public function upload_avatar(){
+        $file = $_FILES['file']; //得到传输的数据
+        $name = $file['name'];
+        $type = strtolower(substr($name, strrpos($name, '.') + 1)); //得到文件类型，并且都转化成小写
+        $allow_type = array('jpg', 'jpeg', 'gif', 'png'); //定义允许上传的类型
+        //判断文件类型是否被允许上传
+        if (!in_array($type, $allow_type)) {
+            //如果不被允许，则直接停止程序运行
+            return json(['status'=>1,'msg'=>'上传文件格式错误','data'=>[]]);
+        }
+        //判断是否是通过HTTP POST上传的
+        if (!is_uploaded_file($file['tmp_name'])) {
+            //如果不是通过HTTP POST上传的
+            return json(['status'=>1,'msg'=>'请使用post格式','data'=>[]]);
+        }
+        $upload_path = ROOT_PATH . 'public' . DS . 'upload'; //上传文件的存放路径
+        $explode = explode(".", $file['name']);
+        $md = md5($explode[1]).'.'.$explode[1];
+        $res = move_uploaded_file($file['tmp_name'], $upload_path . '/' . $md);
+        //开始移动文件到相应的文件夹
+        if ($res) {
+            return json(['status'=>0,'msg'=>'上传成功','data'=>['url'=>$upload_path . '/' . $md]]);
+        } else {
+            return json(['status'=>1,'msg'=>'上传失败','data'=>[]]);
+        }
+
     }
 }

@@ -14,10 +14,14 @@ class Base extends Controller
                 $data = $this->getallheaders();
         }else{
                 $data = getallheaders();
-        }        
-                // dump($data);exit;
+        }   
+        if(!isset($data['Authorization'])){
+            $res = ['status'=>1,'msg'=>'token为空','data'=>[]];
+            json($res)->send();
+            exit;  
+        }             
         $this->token = $data['Authorization'];
-        
+
         $res = $this->check_token($this->token);
         if ($res) {
             json($res)->send();

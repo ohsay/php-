@@ -22,3 +22,4 @@ use think\Route;
 Route::any('api/getcode', 'api/Login/getCode');
 Route::any('api/login', 'api/Login/login');
 Route::any('api/userinfo', 'api/user/index');
+Route::any('api/upload_avatar', 'api/user/upload_avatar');
